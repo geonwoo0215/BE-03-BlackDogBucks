@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.*;
 import static javax.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.prgrms.bdbks.common.domain.AbstractTimeColumn;
-import com.prgrms.bdbks.domain.payment.entity.User;
+import com.prgrms.bdbks.domain.user.entity.User;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +36,9 @@ public class Card extends AbstractTimeColumn {
 	@Column(name = "card_id")
 	private String id;
 
+	@Column(name = "name", length = 30, nullable = false)
+	private String name;
+
 	@Column(nullable = false)
 	private int amount;
 
@@ -41,9 +46,10 @@ public class Card extends AbstractTimeColumn {
 	private User user;
 
 	@Builder
-	protected Card(User user) {
+	protected Card(User user, String name) {
 		validateUser(user);
 		this.user = user;
+		this.name = name;
 	}
 
 	private void validateAmount(int amount) {
@@ -74,7 +80,9 @@ public class Card extends AbstractTimeColumn {
 		this.amount -= amount;
 	}
 
+	public void compareUser(Long userId) {
+		checkArgument(Objects.equals(this.user.getId(), userId));
+	}
 	// 주문금액 <-> 카드 충전금액 비교를 결제에서 검증해라!??
-	//TODO 테스트고고
 
 }
