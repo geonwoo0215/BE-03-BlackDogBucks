@@ -1,4 +1,4 @@
-package com.prgrms.bdbks.domain.card.mapper;
+package com.prgrms.bdbks.domain.card.service.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,7 +10,6 @@ import com.prgrms.bdbks.domain.card.entity.Card;
 
 @Mapper(componentModel = "spring")
 public interface CardMapper {
-	CardMapper INSTANCE = Mappers.getMapper(CardMapper.class);
 
 	@Mappings({
 		@Mapping(source = "id", target = "cardId"),
@@ -19,18 +18,3 @@ public interface CardMapper {
 	})
 	CardSearchResponse toCardSearchResponse(Card card);
 }
-
-/**
- * Card
- * - String id
- * - int amount
- * - User user
- *
- *
- * CardChargeRequest
- * - int amount
- *
- * @Mapping(target = "
- *
- *
- */
