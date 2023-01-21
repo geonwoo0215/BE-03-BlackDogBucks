@@ -43,7 +43,7 @@ public class Coupon extends AbstractTimeColumn {
 	@Column(nullable = false)
 	private LocalDateTime expireDate;
 
-	private boolean isUsed;
+	private boolean used;
 
 	@Builder
 	protected Coupon(Long userId, String name, int price, LocalDateTime expireDate) {
@@ -56,16 +56,16 @@ public class Coupon extends AbstractTimeColumn {
 		this.name = name;
 		this.price = price;
 		this.expireDate = expireDate;
-		this.isUsed = false;
+		this.used = false;
 	}
 
 	private void validateUserId(Long userId) {
-		checkNotNull(userId, "유저 아이디를 입력해주세요");
+		checkNotNull(userId, "유저 아이디를 입력해주세요.");
 	}
 
 	private void validateName(String name) {
-		checkArgument(StringUtils.hasText(name), "올바른 쿠폰명을 입력해주세요");
-		checkArgument(name.length() <= 10, "이름은 10자 이하로 작성해주세요");
+		checkArgument(StringUtils.hasText(name), "올바른 쿠폰명을 입력해주세요.");
+		checkArgument(name.length() <= 10, "이름은 10자 이하로 작성해주세요.");
 	}
 
 	private void validatePrice(int price) {
@@ -74,6 +74,6 @@ public class Coupon extends AbstractTimeColumn {
 
 	private void validateExpireDate(LocalDateTime expireDate) {
 		checkArgument(expireDate.isAfter(now()), "만료일은 현재시간보다 전일 수 없습니다.");
-		checkNotNull(expireDate, "만료일을 입력해주세요");
+		checkNotNull(expireDate, "만료일을 입력해주세요.");
 	}
 }
