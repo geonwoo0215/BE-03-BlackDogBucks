@@ -4,14 +4,11 @@ import static com.google.common.base.Preconditions.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.prgrms.bdbks.common.domain.AbstractTimeColumn;
 
+import com.prgrms.bdbks.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +23,10 @@ public class Star extends AbstractTimeColumn {
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "star_id")
 	private Long id;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	@Column(nullable = false)
 	private short count;
