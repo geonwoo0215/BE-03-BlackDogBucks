@@ -1,5 +1,8 @@
 package com.prgrms.bdbks.domain.card.dto;
 
+import lombok.Getter;
+
+@Getter
 public class CardChargeResponse {
 
 	private final String cardId;
