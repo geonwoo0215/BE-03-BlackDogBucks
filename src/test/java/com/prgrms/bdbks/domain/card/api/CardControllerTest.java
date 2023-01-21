@@ -9,9 +9,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import javax.servlet.http.HttpSession;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.bdbks.domain.card.dto.CardChargeRequest;
+import com.prgrms.bdbks.domain.testutil.CardObjectProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
@@ -25,6 +29,8 @@ import com.prgrms.bdbks.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @SpringBootTest
 @Transactional
 @RequiredArgsConstructor
@@ -37,6 +43,7 @@ class CardControllerTest {
 	private final CardRepository cardRepository;
 	private static final String SESSION_USER = "user";
 
+	private final ObjectMapper objectMapper;
 	private final MockMvc mockMvc;
 	private User user;
 	private Card card;
@@ -64,5 +71,27 @@ class CardControllerTest {
 			.andExpect(jsonPath("$.cardSearchResponses[0].name").value(card.getName()))
 			.andExpect(jsonPath("$.cardSearchResponses[0].amount").value(card.getAmount()))
 			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("getCard - 사용자의 충전카드에 한도 내의 금액을 충전할 수 있다. - 성공")
+	void charge_validAmount_chargeSuccess() throws Exception {
+
+		String cardId = card.getId();
+		int amount = 20000;
+
+		CardChargeRequest cardChargeRequest = CardObjectProvider.createCardRequest(cardId, amount);
+
+		String json = objectMapper.writeValueAsString(cardChargeRequest);
+
+		mockMvc.perform(patch("/api/v1/cards/charge")
+						.content(json)
+						.contentType(APPLICATION_JSON)
+						.sessionAttr("user", user)
+						.accept(APPLICATION_JSON))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.cardId").value(card.getId()))
+				.andExpect(jsonPath("$.amount").value(card.getAmount()));
 	}
 }
