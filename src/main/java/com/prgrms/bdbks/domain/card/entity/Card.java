@@ -6,12 +6,7 @@ import static lombok.AccessLevel.*;
 
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -43,11 +38,13 @@ public class Card extends AbstractTimeColumn {
 	private int amount;
 
 	@OneToOne(fetch = LAZY)
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	@Builder
-	protected Card(User user, String name) {
+	protected Card(String id, User user, String name) {
 		validateUser(user);
+		this.id = id;
 		this.user = user;
 		this.name = name;
 	}
