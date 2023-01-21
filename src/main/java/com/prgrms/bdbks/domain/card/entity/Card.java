@@ -70,7 +70,6 @@ public class Card extends AbstractTimeColumn {
 
 	public void chargeAmount(int amount) {
 		validateChargeAmount(amount);
-		validateAmount(amount);
 		this.amount += amount;
 	}
 
