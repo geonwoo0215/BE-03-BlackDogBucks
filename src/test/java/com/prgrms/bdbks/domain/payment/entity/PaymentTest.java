@@ -30,14 +30,14 @@ class PaymentTest {
 			.build();
 	}
 
-	@Test
 	@DisplayName("validatePaymentType() - 결제 타입 검증 - 성공")
+	@Test
 	void validPaymentType_validPaymentType_ExceptionDoesNotThrown() {
 		assertDoesNotThrow(() -> createPayment(order, validCardId, paymentType, validPrice, validPaymentDateTime));
 	}
 
-	@Test
 	@DisplayName("validatePaymentType() - 결제 타입 검증 - 실패")
+	@Test
 	void validPaymentType_InvalidPaymentType_ExceptionThrown() {
 		PaymentType invalidPaymentType = null;
 
@@ -45,24 +45,24 @@ class PaymentTest {
 			() -> createPayment(order, validCardId, invalidPaymentType, validPrice, validPaymentDateTime));
 	}
 
+	@DisplayName("validatePrice() - 결제금액 검증 - 성공")
 	@ParameterizedTest
 	@ValueSource(ints = {2000, 3000, 5000})
-	@DisplayName("validatePrice() - 결제금액 검증 - 성공")
 	void validatePrice_ValidPrice_ExceptionDoesNotThrown(int price) {
 		assertDoesNotThrow(
 			() -> createPayment(order, validCardId, paymentType, price, validPaymentDateTime));
 	}
 
+	@DisplayName("validatePrice() 결제제겨금액 검증 - 실패")
 	@ParameterizedTest
 	@ValueSource(ints = {-2000, -3000, -5000})
-	@DisplayName("validatePrice() 결제제겨금액 검증 - 실패")
 	void validatePrice_InvalidPrice_ExceptionThrown(int price) {
 		assertThrows(IllegalArgumentException.class,
 			() -> createPayment(order, validCardId, paymentType, price, validPaymentDateTime));
 	}
 
-	@Test
 	@DisplayName("validateCardId() - 충전카드Id 검증 - 성공")
+	@Test
 	void validCardId_validCardId_ExceptionDoesNotThrown() {
 		PaymentType paymentType = PaymentType.ORDER;
 
@@ -70,8 +70,8 @@ class PaymentTest {
 			createPayment(order, validCardId, paymentType, validPrice, validPaymentDateTime));
 	}
 
-	@Test
 	@DisplayName("validateCardId() - 충전카드Id 검증 - 실패")
+	@Test
 	void validCardId_invalidCardId_ExceptionThrown() {
 		Long invalidId = null;
 
@@ -79,14 +79,14 @@ class PaymentTest {
 			() -> createPayment(order, invalidId, paymentType, validPrice, validPaymentDateTime));
 	}
 
-	@Test
 	@DisplayName("validatePaymentDateTime() - 결제 시간 검증 - 성공")
+	@Test
 	void validatePaymentDateTime_validPaymentDateTime_ExceptionDoesNotThrown() {
 		assertDoesNotThrow(() -> createPayment(order, validCardId, paymentType, validPrice, validPaymentDateTime));
 	}
 
-	@Test
 	@DisplayName("validatePaymentDateTime() - 결제 시간 검증 - 실패")
+	@Test
 	void validatePaymentDateTime_InvalidPaymentDateTime_ExceptionThrown() {
 		LocalDateTime paymentDateTime = null;
 
