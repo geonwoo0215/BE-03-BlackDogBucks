@@ -13,8 +13,8 @@ import com.prgrms.bdbks.domain.card.dto.CardChargeResponse;
 import com.prgrms.bdbks.domain.card.dto.CardSearchResponse;
 import com.prgrms.bdbks.domain.card.dto.CardSearchResponses;
 import com.prgrms.bdbks.domain.card.entity.Card;
-import com.prgrms.bdbks.domain.card.service.mapper.CardMapper;
 import com.prgrms.bdbks.domain.card.repository.CardRepository;
+import com.prgrms.bdbks.domain.card.service.mapper.CardMapper;
 import com.prgrms.bdbks.domain.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
@@ -44,5 +44,19 @@ public class CardService {
 			.collect(Collectors.toList());
 
 		return CardSearchResponses.of(responses);
+	}
+
+	public CardSearchResponse getCard(String cardId) {
+		Card card = cardRepository.findById(cardId)
+			.orElseThrow(() -> new EntityNotFoundException(Card.class, cardId));
+
+		return cardMapper.toCardSearchResponse(card);
+	}
+
+	public void pay(String cardId, int amount) {
+		//TODO 쿼리 나가는지 확인할 것
+		Card card = cardRepository.findById(cardId)
+			.orElseThrow(() -> new EntityNotFoundException(Card.class, cardId));
+		card.payAmount(amount);
 	}
 }
