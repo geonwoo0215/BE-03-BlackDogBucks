@@ -14,12 +14,12 @@ import com.prgrms.bdbks.domain.payment.PaymentType;
 class PaymentTest {
 
 	private final Order order = new Order();
-	private final Long validCardId = 1L;
+	private final String validCardId = "cardId123";
 	private final PaymentType paymentType = PaymentType.ORDER;
 	private final int validPrice = 10000;
 	private final LocalDateTime validPaymentDateTime = LocalDateTime.now();
 
-	private Payment createPayment(Order order, Long cardId, PaymentType paymentType, int price,
+	private Payment createPayment(Order order, String cardId, PaymentType paymentType, int price,
 		LocalDateTime paymentDateTime) {
 		return Payment.builder()
 			.order(order)
@@ -73,7 +73,7 @@ class PaymentTest {
 	@DisplayName("validateCardId() - 충전카드Id 검증 - 실패")
 	@Test
 	void validCardId_invalidCardId_ExceptionThrown() {
-		Long invalidId = null;
+		String invalidId = null;
 
 		assertThrows(NullPointerException.class,
 			() -> createPayment(order, invalidId, paymentType, validPrice, validPaymentDateTime));

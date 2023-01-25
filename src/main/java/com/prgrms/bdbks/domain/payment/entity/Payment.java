@@ -1,6 +1,7 @@
 package com.prgrms.bdbks.domain.payment.entity;
 
 import static com.google.common.base.Preconditions.*;
+import static com.prgrms.bdbks.domain.card.entity.Card.*;
 import static com.prgrms.bdbks.domain.payment.PaymentStatus.*;
 import static javax.persistence.EnumType.*;
 
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.prgrms.bdbks.common.domain.AbstractTimeColumn;
+import com.prgrms.bdbks.domain.card.entity.Card;
 import com.prgrms.bdbks.domain.payment.PaymentStatus;
 import com.prgrms.bdbks.domain.payment.PaymentType;
 
@@ -41,7 +43,7 @@ public class Payment extends AbstractTimeColumn {
 	@OneToOne(fetch = FetchType.LAZY)
 	private Order order;
 
-	private Long cardId;
+	private String cardId;
 
 	@Enumerated(value = STRING)
 	private PaymentType paymentType;
@@ -55,7 +57,7 @@ public class Payment extends AbstractTimeColumn {
 	private PaymentStatus paymentStatus;
 
 	@Builder
-	protected Payment(Order order, Long cardId, PaymentType paymentType, int price, LocalDateTime paymentDateTime) {
+	protected Payment(Order order, String cardId, PaymentType paymentType, int price, LocalDateTime paymentDateTime) {
 		validateCardId(cardId);
 		validatePrice(price);
 		validatePaymentType(paymentType);
@@ -77,7 +79,7 @@ public class Payment extends AbstractTimeColumn {
 		checkArgument(price >= 0, "결제 금액은 0원부터 가능합니다.");
 	}
 
-	private void validateCardId(Long cardId) {
+	private void validateCardId(String cardId) {
 		checkNotNull(cardId, "카드 아이디를 입력해주세요");
 	}
 
@@ -87,4 +89,30 @@ public class Payment extends AbstractTimeColumn {
 
 	//TODO 주문 금액과 충전 카드의 금액을 비교해야 함(결제 가능한 경우 충전카드의 메소드 호출)
 	//TODO 충전 카드에 충전 요청 시 충전 금액을 검증해야 함(충전 가능한 경우 충전카드의 메소드 호출)
+
+	private static void validateChargeAmount(int amount) {
+		checkArgument(MIN_CHARGE_PRICE <= amount && amount <= MAX_CHARGE_PRICE, "충전 금액은 10,000~550,000원 까지 가능합니다.");
+	}
+
+	public static Payment createChargePayment(String cardId, int price) {
+		validateChargeAmount(price);
+
+		return Payment.builder()
+			.paymentType(PaymentType.CHARGE)
+			.price(price)
+			.paymentDateTime(LocalDateTime.now())
+			.cardId(cardId)
+			.build();
+	}
+
+	public static Payment createOrderPayment(Order order, Card card, int price) {
+		return Payment.builder()
+			.paymentType(PaymentType.ORDER)
+			.order(order)
+			.price(price)
+			.paymentDateTime(LocalDateTime.now())
+			.cardId(card.getId())
+			.build();
+	}
 }
+

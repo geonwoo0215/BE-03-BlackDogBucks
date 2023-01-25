@@ -1,10 +1,8 @@
 package com.prgrms.bdbks.domain.card.repository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.prgrms.bdbks.CustomDataJpaTest;
@@ -50,13 +48,4 @@ class CardRepositoryTest {
 	@Autowired
 	UserRepository userRepository;
 
-	@Test
-	void queryTest() {
-		User user = getUser();
-		log.info("================findById==============");
-		List<Card> result = cardRepository.findByUserId(user.getId());
-		System.out.println(result.get(0).getId());
-
-	}
-	
 }

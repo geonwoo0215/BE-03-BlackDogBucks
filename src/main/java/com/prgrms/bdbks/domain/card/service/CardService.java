@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.bdbks.common.exception.EntityNotFoundException;
-import com.prgrms.bdbks.domain.card.dto.CardChargeRequest;
 import com.prgrms.bdbks.domain.card.dto.CardChargeResponse;
 import com.prgrms.bdbks.domain.card.dto.CardSearchResponse;
 import com.prgrms.bdbks.domain.card.dto.CardSearchResponses;
@@ -27,12 +25,14 @@ public class CardService {
 	private final CardMapper cardMapper;
 
 	@Transactional
-	public CardChargeResponse charge(Long userid, CardChargeRequest cardChargeRequest) {
+	public CardChargeResponse charge(Long userid, String cardId, int amount) {
 		//TODO 5만원 이상 충전 시 쿠폰 생성로직 추가(FACADE)
-		Card card = cardRepository.findById(cardChargeRequest.getCardId())
-			.orElseThrow(() -> new EntityNotFoundException(Card.class, cardChargeRequest.getCardId()));
+		Card card = cardRepository.findById(cardId)
+			.orElseThrow(() -> new EntityNotFoundException(Card.class, cardId));
+
 		card.compareUser(userid);
-		card.chargeAmount(cardChargeRequest.getAmount());
+		card.chargeAmount(amount);
+
 		return CardChargeResponse.of(card.getId(), card.getAmount());
 	}
 
@@ -46,17 +46,14 @@ public class CardService {
 		return CardSearchResponses.of(responses);
 	}
 
-	public CardSearchResponse getCard(String cardId) {
-		Card card = cardRepository.findById(cardId)
+	public Card getCard(String cardId) {
+		return cardRepository.findById(cardId)
 			.orElseThrow(() -> new EntityNotFoundException(Card.class, cardId));
-
-		return cardMapper.toCardSearchResponse(card);
 	}
 
-	public void pay(String cardId, int amount) {
+	@Transactional
+	public void pay(Card card, int amount) {
 		//TODO 쿼리 나가는지 확인할 것
-		Card card = cardRepository.findById(cardId)
-			.orElseThrow(() -> new EntityNotFoundException(Card.class, cardId));
 		card.payAmount(amount);
 	}
 }

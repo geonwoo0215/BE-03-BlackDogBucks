@@ -1,6 +1,5 @@
 package com.prgrms.bdbks.domain.coupon.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,18 +17,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CouponService {
-
+	public static final int PRICE_CONDITION = 50000;
 	private final CouponMapper couponMapper;
 	private final CouponRepository couponRepository;
 
-	public CouponSaveResponse create(User user) {
+	public CouponSaveResponse create(Long userId) {
 
-		Coupon coupon = Coupon.builder()
-			.userId(user.getId())
-			.name(user.getNickname() + "의 쿠폰")
-			.price(6000)
-			.expireDate(LocalDateTime.now().plusMonths(6L))
-			.build();
+		Coupon coupon = Coupon.createCoupon(userId);
 
 		Coupon saveCoupon = couponRepository.save(coupon);
 

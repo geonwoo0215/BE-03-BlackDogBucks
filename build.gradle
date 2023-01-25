@@ -34,9 +34,13 @@ ext {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Apache Commons Lang
+    implementation 'org.apache.commons:commons-lang3:3.0'
 
     // jdbc
     implementation 'org.springframework.data:spring-data-jdbc'
@@ -63,6 +67,13 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     compileOnly 'org.projectlombok:lombok'
 
+    // mapstruct
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+    // lombok 에서 mapstruct binding 해주는 기능
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
     // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
 
@@ -72,6 +83,11 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-spatial
+    implementation 'org.hibernate:hibernate-spatial'
+    //https://mvnrepository.com/artifact/org.locationtech.jts/jts-core
+    implementation 'org.locationtech.jts:jts-core:1.19.0'
 
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.9.0'
 
@@ -104,8 +120,7 @@ configurations {
 }
 
 compileQuerydsl.doFirst {
-    if (file(querydslDir).exists())
-        delete(file(querydslDir))
+    if (file(querydslDir).exists()) delete(file(querydslDir))
 }
 
 compileQuerydsl {

@@ -59,6 +59,15 @@ public class Coupon extends AbstractTimeColumn {
 		this.used = false;
 	}
 
+	public static Coupon createCoupon(Long userId) {
+		return Coupon.builder()
+			.userId(userId)
+			.name("설맞이 쿠폰")
+			.price(6000)
+			.expireDate(LocalDateTime.now().plusMonths(6L))
+			.build();
+	}
+
 	private void validateUserId(Long userId) {
 		checkNotNull(userId, "유저 아이디를 입력해주세요.");
 	}

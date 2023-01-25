@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.prgrms.bdbks.domain.card.dto.CardChargeRequest;
 import com.prgrms.bdbks.domain.card.dto.CardChargeResponse;
 import com.prgrms.bdbks.domain.card.dto.CardSearchResponses;
 import com.prgrms.bdbks.domain.card.service.CardService;
+import com.prgrms.bdbks.domain.payment.dto.PaymentChargeRequest;
+import com.prgrms.bdbks.domain.payment.facade.PaymentFacadeService;
 import com.prgrms.bdbks.domain.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CardController {
 
+	private final PaymentFacadeService paymentFacadeService;
 	private final CardService cardService;
 
 	@GetMapping(value = "/charge", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,9 +36,13 @@ public class CardController {
 
 	@PatchMapping(value = "/charge", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CardChargeResponse> charge(@SessionAttribute("user") User user,
-		@RequestBody @Valid CardChargeRequest cardChargeRequest) {
+		@RequestBody @Valid PaymentChargeRequest paymentChargeRequest) {
 
-		CardChargeResponse cardChargeResponse = cardService.charge(user.getId(), cardChargeRequest);
-		return ResponseEntity.ok(cardChargeResponse);
+		paymentFacadeService.chargePay(user.getId(), paymentChargeRequest);
+
+		CardChargeResponse chargeResponse = cardService.charge(user.getId(), paymentChargeRequest.getCardId(),
+			paymentChargeRequest.getAmount());
+
+		return ResponseEntity.ok(chargeResponse);
 	}
 }

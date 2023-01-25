@@ -3,8 +3,6 @@ package com.prgrms.bdbks.domain.star.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.prgrms.bdbks.common.exception.EntityNotFoundException;
-import com.prgrms.bdbks.domain.star.dto.StarSearchResponse;
 import com.prgrms.bdbks.domain.star.entity.Star;
 import com.prgrms.bdbks.domain.star.mapper.StarMapper;
 import com.prgrms.bdbks.domain.star.repository.StarRepository;
@@ -33,16 +31,23 @@ public class StarService {
 		return star.getId();
 	}
 
-	public StarSearchResponse findById(Long userId) {
+	public Star findById(Long userId) {
 		Star star = starRepository.findByUserId(userId)
 			.orElseThrow(() -> new EntityNotFoundException(Star.class, userId));
 
-		return starMapper.toStarSearchResponse(star);
+		return star;
 	}
 
 	@Transactional
 	public void delete(Long userId) {
 		starRepository.deleteByUserId(userId);
+	}
+
+	@Transactional
+	public void updateCount(Star star, int count) {
+
+		star.updateCount(count);
+
 	}
 
 	//TODO 거래 취소, 반품 시 별은 원상복구(원래 상태로 감소)
