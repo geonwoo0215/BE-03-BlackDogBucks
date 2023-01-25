@@ -1,5 +1,6 @@
 package com.prgrms.bdbks.domain.card.entity;
 
+import static com.prgrms.bdbks.domain.testutil.CardObjectProvider.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -24,12 +25,6 @@ class CardTest {
 		.phone("01012341234")
 		.role(Role.USER)
 		.build();
-
-	private Card createCard(User user) {
-		return Card.builder()
-			.user(user)
-			.build();
-	}
 
 	@DisplayName("validateUser() - 유저의 정보가 유효하면 충전카드가 생성된다. - 성공")
 	@Test
