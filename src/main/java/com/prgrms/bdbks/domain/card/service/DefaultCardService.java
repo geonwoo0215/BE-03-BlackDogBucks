@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.prgrms.bdbks.common.exception.EntityNotFoundException;
 import com.prgrms.bdbks.domain.card.converter.CardMapper;
 import com.prgrms.bdbks.domain.card.dto.CardChargeResponse;
+import com.prgrms.bdbks.domain.card.dto.CardPayResponse;
+import com.prgrms.bdbks.domain.card.dto.CardRefundResponse;
 import com.prgrms.bdbks.domain.card.dto.CardSearchResponse;
 import com.prgrms.bdbks.domain.card.dto.CardSearchResponses;
 import com.prgrms.bdbks.domain.card.entity.Card;
@@ -28,9 +30,7 @@ public class DefaultCardService implements CardService {
 	@Transactional
 	public CardChargeResponse charge(Long userId, String cardId, int amount) {
 		//TODO 5만원 이상 충전 시 쿠폰 생성로직 추가(FACADE)
-		Card card = cardRepository.findById(cardId)
-			.orElseThrow(() -> new EntityNotFoundException(Card.class, cardId));
-
+		Card card = findByCardId(cardId);
 		card.compareUser(userId);
 		card.chargeAmount(amount);
 
@@ -56,8 +56,22 @@ public class DefaultCardService implements CardService {
 
 	@Override
 	@Transactional
-	public void pay(Card card, int totalPrice) {
+	public CardPayResponse pay(Long userId, String cardId, int totalPrice) {
+		Card card = findByCardId(cardId);
+		card.compareUser(userId);
 		card.payAmount(totalPrice);
+
+		return new CardPayResponse(cardId, totalPrice);
+	}
+
+	@Override
+	@Transactional
+	public CardRefundResponse refund(Long userId, String cardId, int totalPrice) {
+		Card card = findByCardId(cardId);
+		card.compareUser(userId);
+		card.refundAmount(totalPrice);
+
+		return new CardRefundResponse(cardId, totalPrice);
 	}
 
 }

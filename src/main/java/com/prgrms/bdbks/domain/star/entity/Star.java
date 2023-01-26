@@ -54,10 +54,12 @@ public class Star extends AbstractTimeColumn {
 		checkNotNull(user, "유저 정보를 입력해주세요");
 	}
 
+	//결제하고
 	public void updateCount(int itemCount) {
 		this.count += itemCount;
 	}
 
+	//주문완료
 	public int exchangeCoupon() {
 		int couponCount = count / 12;
 		this.count %= 12;

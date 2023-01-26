@@ -1,6 +1,8 @@
 package com.prgrms.bdbks.domain.card.service;
 
 import com.prgrms.bdbks.domain.card.dto.CardChargeResponse;
+import com.prgrms.bdbks.domain.card.dto.CardPayResponse;
+import com.prgrms.bdbks.domain.card.dto.CardRefundResponse;
 import com.prgrms.bdbks.domain.card.dto.CardSearchResponses;
 import com.prgrms.bdbks.domain.card.entity.Card;
 
@@ -11,5 +13,7 @@ public interface CardService {
 
 	Card findByCardId(String cardId);
 
-	void pay(Card card, int totalPrice);
+	CardPayResponse pay(Long userId, String cardId, int totalPrice);
+
+	CardRefundResponse refund(Long userId, String cardId, int totalPrice);
 }

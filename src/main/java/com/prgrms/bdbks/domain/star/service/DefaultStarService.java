@@ -1,7 +1,5 @@
 package com.prgrms.bdbks.domain.star.service;
 
-import javax.xml.stream.events.StartDocument;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,12 +49,8 @@ public class DefaultStarService implements StarService {
 
 	@Override
 	public void updateCount(Long userId, int orderCount, boolean isCouponUsed) {
-		Star star =  starRepository.findByUserId(userId)
-			.orElseThrow(() -> new EntityNotFoundException(Star.class, userId));
-
-		if (!isCouponUsed) {
-			star.updateCount(orderCount);
-		}
+		Star star = findByUserId(userId);
+		star.updateCount(orderCount);
 	}
 
 	//TODO 거래 취소, 반품 시 별은 원상복구(원래 상태로 감소)

@@ -39,4 +39,5 @@ public class CouponService {
 				.map(couponMapper::toCouponSearchResponse)
 				.collect(Collectors.toList()));
 	}
+
 }

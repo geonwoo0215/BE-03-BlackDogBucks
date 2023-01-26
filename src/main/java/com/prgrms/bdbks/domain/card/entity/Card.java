@@ -56,7 +56,7 @@ public class Card extends AbstractTimeColumn {
 	}
 
 	private void validateAmount(int amount) {
-		checkArgument(amount >= 0, "결제는 0원 이상부터 가능합니다.");
+		checkArgument(amount >= 0, "결제와 충전은 0원 이상부터 가능합니다.");
 	}
 
 	private void validateUser(User user) {
@@ -74,6 +74,11 @@ public class Card extends AbstractTimeColumn {
 	public void chargeAmount(int amount) {
 		validateChargeAmount(amount);
 		this.amount += amount;
+	}
+
+	public void refundAmount(int amount) {
+		validateAmount(amount);
+		this.amount +=amount;
 	}
 
 	public void payAmount(int amount) {
