@@ -27,6 +27,6 @@ public class PaymentOrderRequest {
 	private Boolean couponUsed;
 
 	@Positive(message = "구매 수량은 0보다 커야 합니다.")
-	private int count;
+	private int itemCount;
 }
 

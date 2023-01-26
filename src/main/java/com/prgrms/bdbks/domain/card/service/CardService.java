@@ -10,4 +10,6 @@ public interface CardService {
 	CardSearchResponses findAll(Long userId);
 
 	Card findByCardId(String cardId);
+
+	void pay(Card card, int totalPrice);
 }

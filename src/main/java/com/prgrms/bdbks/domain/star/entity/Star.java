@@ -36,7 +36,7 @@ public class Star extends AbstractTimeColumn {
 	private User user;
 
 	@Column(nullable = false)
-	private short count;
+	private int count;
 
 	@Builder
 	protected Star(User user, short count) {

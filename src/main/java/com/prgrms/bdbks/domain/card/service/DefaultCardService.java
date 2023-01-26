@@ -54,4 +54,10 @@ public class DefaultCardService implements CardService {
 			.orElseThrow(() -> new EntityNotFoundException(Card.class, cardId));
 	}
 
+	@Override
+	@Transactional
+	public void pay(Card card, int totalPrice) {
+		card.payAmount(totalPrice);
+	}
+
 }

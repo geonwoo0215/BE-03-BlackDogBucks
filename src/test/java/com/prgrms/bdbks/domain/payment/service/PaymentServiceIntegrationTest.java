@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.bdbks.domain.card.entity.Card;
 import com.prgrms.bdbks.domain.card.repository.CardRepository;
-import com.prgrms.bdbks.domain.payment.entity.Order;
 import com.prgrms.bdbks.domain.testutil.UserObjectProvider;
 import com.prgrms.bdbks.domain.user.entity.User;
 import com.prgrms.bdbks.domain.user.repository.UserRepository;

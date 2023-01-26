@@ -30,7 +30,7 @@ public class CardController {
 
 	@GetMapping(value = "/charge", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CardSearchResponses> getCard(@SessionAttribute("user") User user) {
-		CardSearchResponses cardSearchResponses = cardService.getCardList(user);
+		CardSearchResponses cardSearchResponses = cardService.findAll(user.getId());
 		return ResponseEntity.ok(cardSearchResponses);
 	}
 

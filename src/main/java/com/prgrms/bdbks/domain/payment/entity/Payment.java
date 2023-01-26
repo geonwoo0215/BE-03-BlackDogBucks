@@ -104,6 +104,7 @@ public class Payment extends AbstractTimeColumn {
 	}
 
 	public static Payment createOrderPayment(Order order, Card card, int price) {
+
 		return Payment.builder()
 			.paymentType(PaymentType.ORDER)
 			.order(order)

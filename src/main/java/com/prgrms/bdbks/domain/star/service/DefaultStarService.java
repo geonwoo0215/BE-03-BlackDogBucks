@@ -1,5 +1,7 @@
 package com.prgrms.bdbks.domain.star.service;
 
+import javax.xml.stream.events.StartDocument;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +36,7 @@ public class DefaultStarService implements StarService {
 	}
 
 	@Override
-	public Star findById(Long userId) {
+	public Star findByUserId(Long userId) {
 		Star star = starRepository.findByUserId(userId)
 			.orElseThrow(() -> new EntityNotFoundException(Star.class, userId));
 
@@ -48,12 +50,19 @@ public class DefaultStarService implements StarService {
 	}
 
 	@Override
-	@Transactional
-	public void updateCount(Star star, int count) {
+	public void updateCount(Long userId, int orderCount, boolean isCouponUsed) {
+		Star star =  starRepository.findByUserId(userId)
+			.orElseThrow(() -> new EntityNotFoundException(Star.class, userId));
 
-		star.updateCount(count);
-
+		if (!isCouponUsed) {
+			star.updateCount(orderCount);
+		}
 	}
 
 	//TODO 거래 취소, 반품 시 별은 원상복구(원래 상태로 감소)
+
+	@Override
+	public int checkCountAndExchangeCoupon() {
+		return 0;
+	}
 }
